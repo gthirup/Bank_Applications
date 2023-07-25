@@ -9,26 +9,27 @@ using BankApplication.Responses;
 using BankApplication.Extension;
 using BankApplication.DataAccess;
 using BankApplication.UseCases;
-
+using ILogger = BankApplication.Interfaces.ILogger;
 
 namespace BankApplication
 {
     public class Program
-    {
-
+    {     
         public static async Task Main(string[] args)
         {
             #region ObjectInitialization
 
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, true);
 
+            ILogger logger = new Logger();
+
             IConfiguration config = builder.Build();
 
-            IXmlHelper xmlhelper = new XmlHelper();
+            IXmlHelper xmlhelper = new XmlHelper(logger);
 
-            IValidateInput validateInput=new ValidateInputs(config,xmlhelper);
+            IValidateInput validateInput=new ValidateInputs(config,xmlhelper, logger);
 
-            BankOperation bankOperation = new BankOperation(config, xmlhelper,validateInput); bool showMenu = true; bool printOption = true;
+            BankOperation bankOperation = new BankOperation(config, xmlhelper,validateInput, logger); bool showMenu = true; bool printOption = true;
 
             #endregion
 
@@ -52,7 +53,7 @@ namespace BankApplication
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get all details from rate table. Method: {nameof(Program)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                logger.writeLog($"Something went wrong when trying to get all details from rate table. Method: {nameof(Program)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
         }
 

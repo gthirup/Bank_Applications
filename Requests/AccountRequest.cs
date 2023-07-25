@@ -9,12 +9,12 @@ namespace BankApplication.Requests
     public class AccountRequest
     {
 
-        public string? AccountId { get; set; }
+        public string? AccountId { get; set; } = string.Empty;
 
-        public string? AccountNumber { get; set; }
+        public string? AccountNumber { get; set; } = string.Empty;
 
-        public string? AmountValue { get; set; }
+        public string? AmountValue { get; set; } = string.Empty;
 
-        public string? Interest { get; set; }
+        public string? Interest { get; set; } = string.Empty;
     }
 }

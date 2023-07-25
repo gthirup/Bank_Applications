@@ -21,11 +21,13 @@ namespace BankApplication.Usecases
         private readonly IConfiguration _configuration;
         private readonly IXmlHelper _xmlHelper;
         private readonly IValidateInput _validateInput;
-        public BankOperation(IConfiguration configuration, IXmlHelper xmlHelper, IValidateInput validateInput)
+        private readonly ILogger _logger;
+        public BankOperation(IConfiguration configuration, IXmlHelper xmlHelper, IValidateInput validateInput, ILogger logger)
         {
             _configuration = configuration;
             _xmlHelper = xmlHelper;
             _validateInput = validateInput;
+            _logger = logger;
         }
         #endregion
 
@@ -72,9 +74,8 @@ namespace BankApplication.Usecases
                 message = response.Message;
                 if (!string.IsNullOrEmpty(message))
                 {
-                    Console.WriteLine(response.Message);
-
-                }
+                        Console.WriteLine(response.Message);                  
+                                   }
                 #endregion
 
                 #endregion
@@ -82,7 +83,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to invoke banking operation. Method: {nameof(InvokeBankingOperations)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to invoke banking operation. Method: {nameof(InvokeBankingOperations)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return new BaseResponse<dynamic>()
             {
@@ -174,7 +175,7 @@ namespace BankApplication.Usecases
                             break;
 
                         case MenuOptions.QT:
-                            Environment.Exit(0);
+                            Environment.Exit(1);
                             message = "";
                             status = ResponseStatus.Success;
 
@@ -197,7 +198,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get statement. Method: {nameof(ProcessUserInputs)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get statement. Method: {nameof(ProcessUserInputs)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -275,7 +276,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to inovke input transaction. Method: {nameof(InvokeInputTransaction)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to inovke input transaction. Method: {nameof(InvokeInputTransaction)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -318,7 +319,7 @@ namespace BankApplication.Usecases
 
                         if (inputResponse.Status == ResponseStatus.Success)
                         {
-                            Console.WriteLine("Date" + "\t\t\t|" + "Rule Id" + "\t\t\t|" + "Rate %");
+                            Console.WriteLine("Date" + "\t\t\t|" + "Rule Id" + "\t\t|" + "Rate %");
 
                             foreach (var list in inputResponse.Data)
                             {
@@ -351,7 +352,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to invoke define rule process. Method: {nameof(InvokeDefineRuleProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to invoke define rule process. Method: {nameof(InvokeDefineRuleProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<dynamic>()
@@ -435,7 +436,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to inovke print statement. Method: {nameof(InvokePrintStatementProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to inovke print statement. Method: {nameof(InvokePrintStatementProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<dynamic>()
@@ -601,7 +602,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to do input transaction. Method: {nameof(InputTransactionProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to do input transaction. Method: {nameof(InputTransactionProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<List<TransactionDetails>>()
@@ -649,7 +650,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to invoke define rule process. Method: {nameof(InvokeDefineRuleProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to invoke define rule process. Method: {nameof(InvokeDefineRuleProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<List<RateRequest>>()
@@ -700,7 +701,7 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get statement. Method: {nameof(PrintProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get statement. Method: {nameof(PrintProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<List<PrintStatementResponse>>()
@@ -732,10 +733,8 @@ namespace BankApplication.Usecases
                 var logDtls = await _xmlHelper.GetAllInterestLogDetails();
 
                
-                if (logDtls != null && logDtls?.FirstOrDefault()?.Date != DateTime.Now.Date)//no need
+                if (logDtls != null && logDtls?.FirstOrDefault()?.Date != DateTime.Now.Date)
                 {
-
-
                     if (logDtls?.Count() > 0)
                     {
                         dates = Enumerable.Range(1, int.MaxValue)
@@ -784,16 +783,16 @@ namespace BankApplication.Usecases
 
 
                                 }
-                                Logger.writeLog($"Info:Interest calculated for the account on the end of the balance.");
+                                _logger.writeLog($"Info:Interest calculated for the account on the end of the balance.");
                             }
                             else
                             {
-                                Logger.writeLog($"Info: There is no accounts in table. Please create account.");
+                                _logger.writeLog($"Info: There is no accounts in table. Please create account.");
                             }
                         }
                         else
                         {
-                            Logger.writeLog($"Info: There is no rate interest rule in table. Please define the rules.");
+                            _logger.writeLog($"Info: There is no rate interest rule in table. Please define the rules.");
                         }
                     }
                     #endregion
@@ -805,7 +804,7 @@ namespace BankApplication.Usecases
 
                     if (DateTime.Now == endDate)
                     {
-                        Logger.writeLog($"Interest crediting process started at end of month.");
+                        _logger.writeLog($"Interest crediting process started at end of month.");
                         await _xmlHelper.UpdateInterestInAccount(null, true);
                     }
                     #endregion
@@ -815,12 +814,41 @@ namespace BankApplication.Usecases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to apply the interest calculation. Method: {nameof(InterestCalculation)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to apply the interest calculation. Method: {nameof(InterestCalculation)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
 
             return null;
 
             #endregion
+        }
+
+        private BaseResponse<string> GetUserInput()
+        {
+            ResponseStatus status = ResponseStatus.Success; string? message = string.Empty; string? option = null;
+
+            try
+            {
+                option = Console.ReadLine();
+            }
+            catch (System.FormatException)
+            {
+                message = "Please enter an initial character value for the otipns";
+                _logger.writeLog($"Something went wrong when trying to get user input. Method: {nameof(GetUserInput)},Error: {message}, StackTrace: {message}");
+                status = ResponseStatus.NotAllowed;
+            }
+            catch (Exception)
+            {
+                message = "An unexpected error happened. Please try again";
+                _logger.writeLog($"Something went wrong when trying to get user input. Method: {nameof(GetUserInput)},Error: {message}, StackTrace: {message}");
+                status = ResponseStatus.Failure;
+            }
+            return new BaseResponse<string>()
+            {
+                Status = status,
+                Data = option,
+                Message = message
+            };
+
         }
 
         #endregion
@@ -839,35 +867,7 @@ namespace BankApplication.Usecases
 
             return currentTxnId;
         }
-
-        static BaseResponse<string> GetUserInput()
-        {
-            ResponseStatus status = ResponseStatus.Success; string? message = string.Empty; string? option = null;
-
-            try
-            {
-                option = Console.ReadLine();
-            }
-            catch (System.FormatException)
-            {
-                message = "Please enter an initial character value for the otipns";
-                Logger.writeLog($"Something went wrong when trying to get user input. Method: {nameof(GetUserInput)},Error: {message}, StackTrace: {message}");
-                status = ResponseStatus.NotAllowed;
-            }
-            catch (Exception)
-            {
-                message = "An unexpected error happened. Please try again";
-                Logger.writeLog($"Something went wrong when trying to get user input. Method: {nameof(GetUserInput)},Error: {message}, StackTrace: {message}");
-                status = ResponseStatus.Failure;
-            }
-            return new BaseResponse<string>()
-            {
-                Status = status,
-                Data = option,
-                Message = message
-            };
-
-        }
+       
 
         static string[] SplitInputs(string Inputs, char splitBy)
         {

@@ -8,20 +8,20 @@ namespace BankApplication.Responses
 {
     public class PrintStatementResponse
     {
-        public string? AccountId { get; set; }
+        public string? AccountId { get; set;} = string.Empty;
 
-        public string? AccountNumber { get; set; }
+        public string? AccountNumber { get; set;} = string.Empty;
 
-        public string? OpenBalance { get; set; }
+        public string? OpenBalance { get; set;} = string.Empty;
 
-        public string? CurrentBalance { get; set; }
+        public string? CurrentBalance { get; set;} = string.Empty;
 
-        public string? TransactionDate { get; set; }
+        public string? TransactionDate { get; set;} = string.Empty;
 
-        public string? TxnId { get; set; }
+        public string? TxnId { get; set;} = string.Empty;
 
-        public string? Type { get; set; }
+        public string? Type { get; set;} = string.Empty;
 
-        public string? TransactionAmount { get; set; }
+        public string? TransactionAmount { get; set; } = string.Empty;
     }
 }

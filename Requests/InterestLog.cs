@@ -8,8 +8,8 @@ namespace BankApplication.Requests
 {
     public class InterestLog
     {
-        public DateTime? Date { get; set; }
+        public DateTime? Date { get; set; } = null;
 
-        public string? IsAppliedInterest { get; set; }
+        public string? IsAppliedInterest { get; set; } = string.Empty;
     }
 }

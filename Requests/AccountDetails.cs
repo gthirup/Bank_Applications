@@ -11,16 +11,16 @@ namespace BankApplication.Requests
     public class AccountDetails
     {
 
-        public string? AccountId { get; set; }
+        public string? AccountId { get; set; } = string.Empty;
 
-        public string? AccountNumber { get; set; }
+        public string? AccountNumber { get; set; } = string.Empty;
 
-        public string? Date { get; set; }
+        public string? Date { get; set; } = string.Empty;
 
-        public string? OpenBalance { get; set; }
+        public string? OpenBalance { get; set; } = string.Empty;
 
-        public string? CurrentBalance { get; set; }
+        public string? CurrentBalance { get; set; } = string.Empty;
 
-        public string? Interest { get; set; }
+        public string? Interest { get; set; } = string.Empty;
     }
 }

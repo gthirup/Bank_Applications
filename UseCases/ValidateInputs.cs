@@ -20,10 +20,12 @@ namespace BankApplication.UseCases
 
         private readonly IConfiguration _configuration;
         private readonly IXmlHelper _xmlHelper;
-        public ValidateInputs(IConfiguration configuration, IXmlHelper xmlHelper)
+        private readonly ILogger _logger;
+        public ValidateInputs(IConfiguration configuration, IXmlHelper xmlHelper, ILogger logger)
         {
             _configuration = configuration;
             _xmlHelper = xmlHelper;
+            _logger = logger;
         }
         #endregion
 
@@ -56,14 +58,12 @@ namespace BankApplication.UseCases
                         if ((isInputValid.Status == ResponseStatus.Success && (string.IsNullOrEmpty(isInputValid.Message))))
                         {
                             status = ResponseStatus.Success;
-
                         }
                         else
                         {
                             status = ResponseStatus.Failure;
                             msg.Add(isInputValid.Message);
                         }
-
                     }
                     else
                     {
@@ -90,13 +90,12 @@ namespace BankApplication.UseCases
                             msg.Add(message);
                             status = ResponseStatus.Failure;
                         }
+                        status = IsdatePastDate(date) == true ? ResponseStatus.Success : ResponseStatus.NotAllowed;
                         #endregion
 
                         #region Rule id check
 
                         bool isRuleIdValid = IsAlphaNum(ruleId);
-
-                        //status = isRuleIdValid is true ? ResponseStatus.Success : ResponseStatus.Failure;
 
                         if (!isRuleIdValid)
                         {
@@ -120,7 +119,6 @@ namespace BankApplication.UseCases
 
                                 msg.Add(message);
                             }
-
                         }
                         else
                         {
@@ -175,7 +173,7 @@ namespace BankApplication.UseCases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to validate the inputs. Method: {nameof(ValidateProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to validate the inputs. Method: {nameof(ValidateProcess)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<string>()
@@ -186,11 +184,8 @@ namespace BankApplication.UseCases
             };
             #endregion
         }
-
-        #endregion
-
-        #region Static Methods
-        static BaseResponse<dynamic> CheckInputFormatForInputTransaction(string[] inputs)
+       
+        private BaseResponse<dynamic> CheckInputFormatForInputTransaction(string[] inputs)
         {
             #region Object Initialization
             ResponseStatus status = ResponseStatus.Success; string? message = string.Empty; List<string> msg = new List<string>();
@@ -218,9 +213,10 @@ namespace BankApplication.UseCases
                     {
 
                         status = IsdateFutureDate(dat) == true ? ResponseStatus.Success : ResponseStatus.NotAllowed;
+                        status = IsdatePastDate(dat) == true ? ResponseStatus.Success : ResponseStatus.NotAllowed;
                         if (status != ResponseStatus.Success)
                         {
-                            message = "Date should be the future date";
+                            message = "You cannot do transaction on this date. Date should not be the future/past date";
                             msg.Add(message);
                         }
 
@@ -356,7 +352,7 @@ namespace BankApplication.UseCases
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to validate input format. Method: {nameof(CheckInputFormatForInputTransaction)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to validate input format. Method: {nameof(CheckInputFormatForInputTransaction)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
             return new BaseResponse<dynamic>()
@@ -367,6 +363,9 @@ namespace BankApplication.UseCases
             };
             #endregion
         }
+        #endregion
+
+        #region Static Methods
         static bool IsAlphaNum(string inputToBeChecked)
         {
             if (string.IsNullOrEmpty(inputToBeChecked))
@@ -409,6 +408,14 @@ namespace BankApplication.UseCases
             DateTime? dt = DateTime.ParseExact(date, @"yyyyMMdd", CultureInfo.InvariantCulture);
 
             bool isValid = dt != null && dt > DateTime.ParseExact(DateTime.Now.Date.ToString("yyyyMMdd"), @"yyyyMMdd", CultureInfo.InvariantCulture) ? false : true;
+
+            return isValid;
+        }
+        static bool IsdatePastDate(string date)
+        {
+            DateTime? dt = DateTime.ParseExact(date, @"yyyyMMdd", CultureInfo.InvariantCulture);
+
+            bool isValid = dt != null && dt < DateTime.ParseExact(DateTime.Now.Date.ToString("yyyyMMdd"), @"yyyyMMdd", CultureInfo.InvariantCulture) ? false : true;
 
             return isValid;
         }

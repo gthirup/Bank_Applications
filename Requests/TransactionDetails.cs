@@ -8,17 +8,17 @@ namespace BankApplication.Requests
 {
     public class TransactionDetails
     {
-        public string? Id { get; set; }
+        public string? Id { get; set; } = string.Empty;
 
-        public string? AccNumber { get; set; }
-        public string? Date { get; set; }
+        public string? AccNumber { get; set; } = string.Empty;
+        public string? Date { get; set; } = string.Empty;
 
-        public string? TxnId { get; set; }
+        public string? TxnId { get; set; } = string.Empty;
 
-        public string? Type { get; set; }
+        public string? Type { get; set; } = string.Empty;
 
-        public string? Amount { get; set; }
+        public string? Amount { get; set; } = string.Empty;
 
-        public string? Balance { get; set; }
+        public string? Balance { get; set; } = string.Empty;
     }
 }

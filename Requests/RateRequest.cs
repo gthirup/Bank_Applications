@@ -8,11 +8,11 @@ namespace BankApplication.Requests
 {
     public class RateRequest
     {
-        public string? Date { get; set; }
+        public string? Date { get; set; } = string.Empty;
 
-        public string? RuleId { get; set; }
+        public string? RuleId { get; set; } = string.Empty;
 
-        public string? Rate { get; set; }
+        public string? Rate { get; set; } = string.Empty;
 
     }
 }

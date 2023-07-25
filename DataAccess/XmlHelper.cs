@@ -16,8 +16,16 @@ using System.Globalization;
 
 namespace BankApplication.DataAccess
 {
+ 
     public class XmlHelper : IXmlHelper
     {
+        #region Initilization       
+        private readonly ILogger _logger;
+        public XmlHelper(ILogger logger)
+        {             
+            _logger = logger;
+        }
+        #endregion
         #region Public Mthods
         public Task<BaseResponses<dynamic>> UpsertAccountDetailsInXML(AccountDetails accounts)
         {
@@ -78,7 +86,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to insert details in account table. Method: {nameof(UpsertAccountDetailsInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to insert details in account table. Method: {nameof(UpsertAccountDetailsInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -152,7 +160,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to insert the details in transaction table. Method: {nameof(UpsertTransactionDetailsInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to insert the details in transaction table. Method: {nameof(UpsertTransactionDetailsInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -216,7 +224,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to insert the details in interest rate table. Method: {nameof(UpsertRatesInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to insert the details in interest rate table. Method: {nameof(UpsertRatesInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -281,7 +289,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to insert the details in interst log table. Method: {nameof(UpsertInterestLogInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to insert the details in interst log table. Method: {nameof(UpsertInterestLogInXML)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
                 status = ResponseStatus.Failure; message = ex.Message;
             }
 
@@ -333,7 +341,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get all details from rate table. Method: {nameof(GetAllRateDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get all details from rate table. Method: {nameof(GetAllRateDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
 
             }
             return rateDetailsList;
@@ -371,7 +379,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get all details from interest log table. Method: {nameof(GetAllInterestLogDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get all details from interest log table. Method: {nameof(GetAllInterestLogDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return logDetails;
             #endregion
@@ -414,7 +422,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get all details from account table. Method: {nameof(GetAllAccountDetials)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get all details from account table. Method: {nameof(GetAllAccountDetials)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return accountDetailsList;
             #endregion
@@ -453,7 +461,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to get all details from transaction table. Method: {nameof(GetAllTransactionDetials)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to get all details from transaction table. Method: {nameof(GetAllTransactionDetials)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return transactionDetails;
             #endregion
@@ -488,7 +496,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to update account detial. Method: {nameof(UpdateAccounts)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to update account detial. Method: {nameof(UpdateAccounts)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return new BaseResponses<dynamic>()
             {
@@ -571,7 +579,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to update interest detail. Method: {nameof(UpdateInterestInAccount)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to update interest detail. Method: {nameof(UpdateInterestInAccount)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return new BaseResponses<dynamic>()
             {
@@ -616,7 +624,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to update rules. Method: {nameof(UpdateRules)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to update rules. Method: {nameof(UpdateRules)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return new BaseResponses<dynamic>()
             {
@@ -656,7 +664,7 @@ namespace BankApplication.DataAccess
             }
             catch (Exception ex)
             {
-                Logger.writeLog($"Something went wrong when trying to update the log details. Method: {nameof(UpdateLogDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
+                _logger.writeLog($"Something went wrong when trying to update the log details. Method: {nameof(UpdateLogDetails)},Error: {ex?.Message}, StackTrace: {ex?.StackTrace}");
             }
             return new BaseResponses<dynamic>()
             {
