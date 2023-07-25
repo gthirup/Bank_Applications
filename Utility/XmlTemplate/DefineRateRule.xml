@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DefineRateRule>
+  <rate>
+    <date>20230725</date>
+    <rule_id>RULE01</rule_id>
+    <rate_percent>1.90</rate_percent>
+  </rate>
+</DefineRateRule>

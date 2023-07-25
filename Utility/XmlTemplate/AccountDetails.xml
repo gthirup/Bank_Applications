@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<accountDetails>
+  <head>
+    <id>2</id>
+    <account>AC002</account>
+    <date>20230725</date>
+    <open_balance>6500.00</open_balance>
+    <current_balance>6500.00</current_balance>
+    <interest />
+  </head>
+  <head>
+    <id>1</id>
+    <account>AC001</account>
+    <date>20230725</date>
+    <open_balance>3000.00</open_balance>
+    <current_balance>5500.00</current_balance>
+    <interest />
+  </head>
+</accountDetails>
