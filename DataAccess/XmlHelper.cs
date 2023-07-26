@@ -547,7 +547,9 @@ namespace BankApplication.DataAccess
                         foreach (XElement itemElement in accountDetails)
                         {
 
-                            itemElement.Element("current_balance").Value = (Convert.ToDecimal(itemElement?.Element("current_balance")?.Value) + Convert.ToDecimal(itemElement?.Element("interest")?.Value)).ToString();
+                            decimal interestrate = Math.Round(Convert.ToDecimal(itemElement?.Element("interest")?.Value) / 365,2);
+                        
+                            itemElement.Element("current_balance").Value = (Convert.ToDecimal(itemElement?.Element("current_balance")?.Value) + interestrate).ToString();
 
                             transactionDetails.AccNumber = itemElement?.Element("account")?.Value;
 
@@ -564,6 +566,8 @@ namespace BankApplication.DataAccess
                             transactionDetails.TxnId = ExtensionLogic.BuildTxnId(transactionDtls, transactionDetails.Date);
 
                             transactionDetails.Type = Constants.INTEREST_TYPE;
+
+                            transactionDetails.Balance = itemElement?.Element("current_balance")?.Value;
 
                             await UpsertTransactionDetailsInXML(transactionDetails);
 
