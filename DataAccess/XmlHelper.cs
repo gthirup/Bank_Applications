@@ -553,7 +553,7 @@ namespace BankApplication.DataAccess
 
                             transactionDetails.AccNumber = itemElement?.Element("account")?.Value;
 
-                            transactionDetails.Amount = itemElement?.Element("interest")?.Value;
+                            transactionDetails.Amount = interestrate.ToString();
 
                             transactionDetails.Date = DateTime.Now.ToString("yyyyMMdd");
 
