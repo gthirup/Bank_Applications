@@ -798,16 +798,17 @@ namespace BankApplication.Usecases
                     #endregion
 
                     #region End of the month interest credited
-                    var startDate = new DateTime(now.Year, now.Month, 1);
+                    var date = (DateTime.Now.Date).AddDays(-1);
+                    var startDate = new DateTime(date.Year, date.Month, 1);
 
                     var endDate = startDate.AddMonths(1).AddDays(-1);
 
-                    if (DateTime.Now == endDate)
+                    if (date == endDate)
                     {
-                        _logger.writeLog($"Interest crediting process started at end of month.");
+                        Logger.writeLog($"Interest crediting process started at end of month.");
                         await _xmlHelper.UpdateInterestInAccount(null, true);
                     }
-                    #endregion
+                   #endregion
 
                 }
 
